@@ -8,6 +8,11 @@ object EventSource {
 }
 
 trait EventSource {
+	def sendEvent[T](e:T):Unit
+	def eventSourceReceive : Actor.Receive
+}
+
+trait ProductionEventSource extends EventSource {
 	this : Actor => //this trait can't be mixed with any class ia not actor
 
 	import EventSource._

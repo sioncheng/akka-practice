@@ -7,9 +7,13 @@ import scala.concurrent.ExecutionContext.Implicits.global
 object Altimeter {
 	case class RateChange(amount: Float)
 	case class AltitudeUpdate(altitude:Double)
+
+	//def apply() = new Altimeter with ProductionEventSource
 }
 
-class Altimeter extends Actor with  ActorLogging with EventSource {
+class Altimeter extends Actor with ProductionEventSource with  ActorLogging  {
+	this : EventSource =>
+
 	import Altimeter._
 
 	case object Tick
