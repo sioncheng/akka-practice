@@ -7,7 +7,7 @@ object Pilots {
 	case object RelinquishControl
 }
 
-class Pilot extends Actor {
+class Pilot (plane : ActorRef ) extends Actor {
 	import Pilots._
 	import Plane._
 
@@ -19,7 +19,9 @@ class Pilot extends Actor {
 
 	def receive = {
 		case ReadyToGo => 
-			context.parent ! Plane.GiveMeControl
+			//context.parent ! Plane.GiveMeControl
+			println(".......",plane)
+			plane ! Plane.GiveMeControl
 			copilot = context.actorFor("../" + copilotName)
 			autopilot = context.actorFor("../AutoPilot")
 		case Controls(controlSurfaces) =>
@@ -60,7 +62,7 @@ class AutoPilot extends Actor {
 }
 
 trait PilotProvider {
-	def pilot: Actor = new Pilot
-	def copilot:Actor = new CoPilot
-	def autopilot:Actor = new AutoPilot
+	def newPilot(plane: ActorRef): Actor = new Pilot(plane)
+	def newCopilot:Actor = new CoPilot
+	def newAutopilot:Actor = new AutoPilot
 }
